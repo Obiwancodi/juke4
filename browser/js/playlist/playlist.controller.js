@@ -14,10 +14,26 @@ juke.controller('NewPlaylistCtrl', function ($scope, $state, PlaylistFactory) {
     };
 });
 
-juke.controller('PlaylistCtrl', function ($scope, PlaylistFactory, thePlaylist) {
+juke.controller('PlaylistCtrl', function ($scope, PlaylistFactory, PlayerFactory, SongFactory, thePlaylist, theSongs) {
     $scope.playlist = thePlaylist;
 
     $scope.addSong = function() {
-        var songName = $scope.songName;
+            for(var i = 0; i < theSongs.length; i++) {
+                if(theSongs[i].name === $scope.songName) {
+                    $scope.playlist.songs.push(SongFactory.convert(theSongs[i]))
+                } 
+            }
+        
     };
+
+
+    $scope.toggle = function (song) {
+    if (song !== PlayerFactory.getCurrentSong()) {
+      PlayerFactory.start(song, $scope.playlist.songs);
+    } else if ( PlayerFactory.isPlaying() ) {
+      PlayerFactory.pause();
+    } else {
+      PlayerFactory.resume();
+    }
+  };
 });
