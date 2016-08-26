@@ -1,22 +1,22 @@
 'use strict';
 
 juke.config(function ($stateProvider) {
-
-  $stateProvider.state('newPlaylist', {
+  $stateProvider.state('newplaylist', {
     url: '/playlists/new',
-    templateUrl: '/js/playlist/templates/playlists.html',
-    controller: 'PlaylistCtrl'
+    templateUrl: '/js/playlist/templates/newplaylist.html',
+    controller: 'NewPlaylistCtrl'
+  });
+
+  $stateProvider.state('playlist', {
+    url: '/playlists/:playlistId',
+    templateUrl: '/js/playlist/templates/playlist.html',
+    controller: 'PlaylistCtrl',
+     resolve: {
+       thePlaylist: function (PlaylistFactory, $stateParams) {
+         return PlaylistFactory.fetchById($stateParams.playlistId);
+       }
+     }
   });
 });
 
 
-$stateProvider.state('playlist', {
-    url: '/playlists/:playlistId',
-    templateUrl: '/js/album/templates/playlist.html',
-    controller: 'PlaylistOneCtrl',
-    resolve: {
-      theAlbum: function (AlbumFactory, $stateParams) {
-        return AlbumFactory.fetchById($stateParams.albumId);
-      }
-    }
-  });

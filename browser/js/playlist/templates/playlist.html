@@ -25,3 +25,23 @@
   <small ng-hide="playlist.songs.length">No songs.</small>
   <hr>
 </div>
+
+<div class="well">
+  <form class="form-horizontal" name="AddSongForm" ng-submit="addSong()">
+    <fieldset>
+      <legend>Add to Playlist</legend>
+      <div class="alert alert-warning" ng-show="newPlaylistForm.$pristine">Please enter a name</div>
+      <div class="form-group">
+        <label class="col-xs-2 control-label">Song</label>
+        <div class="col-xs-10">
+          <input class="form-control" type="text" ng-model="songName" ng-maxlength="32" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-xs-10 col-xs-offset-2">
+          <button type="submit" class="btn btn-success" ng-disabled="newPlaylistForm.$invalid">Add Song</button>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>
