@@ -15,17 +15,22 @@ juke.controller('NewPlaylistCtrl', function ($scope, $state, PlaylistFactory) {
 });
 
 juke.controller('PlaylistCtrl', function ($scope, PlaylistFactory, PlayerFactory, SongFactory, thePlaylist, theSongs) {
+    thePlaylist.songs = thePlaylist.songs.map(function(song) {
+        return SongFactory.convert(song);
+    });
     $scope.playlist = thePlaylist;
 
     $scope.addSong = function() {
-            for(var i = 0; i < theSongs.length; i++) {
-                if(theSongs[i].name === $scope.songName) {
-                    $scope.playlist.songs.push(SongFactory.convert(theSongs[i]))
-                } 
-            }
-        
+      for(var i = 0; i < theSongs.length; i++) {
+        if(theSongs[i].name === $scope.songName) {
+          PlaylistFactory.add($scope.playlist.id, theSongs[i])
+          .then(function (data) {
+            $scope.playlist.songs.push(SongFactory.convert(data));
+            $scope.songName = '';
+          });
+        } 
+      }
     };
-
 
     $scope.toggle = function (song) {
     if (song !== PlayerFactory.getCurrentSong()) {
@@ -35,5 +40,13 @@ juke.controller('PlaylistCtrl', function ($scope, PlaylistFactory, PlayerFactory
     } else {
       PlayerFactory.resume();
     }
+
+    $scope.getCurrentSong = function () {
+      return PlayerFactory.getCurrentSong();
+    };
+  
+    $scope.isPlaying = function (song) {
+      return PlayerFactory.isPlaying() && PlayerFactory.getCurrentSong() === song;
+    };
   };
 });
